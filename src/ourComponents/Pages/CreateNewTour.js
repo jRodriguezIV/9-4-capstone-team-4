@@ -1,13 +1,12 @@
 
-import React, { useState } from 'react';
+import React, { useState  } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import loadingAnimation from '../../assets/S-Loop_transnparent.gif'; // Import the loading animation
+import loadingAnimation from '../../assets/S-Loop_transnparent.gif';
 import Map from '../Map/Map';
 
-// Sanitizer function to prevent SQL injection
+
 function sanitizeInput(input) {
-  // Escape single quotes by replacing them with double single quotes
   return input.replace(/'/g, "''");
 }
 
@@ -16,25 +15,22 @@ const config = {
   apiUrl: process.env.REACT_APP_API_URL,
   googleApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
   unsplashApiKey: process.env.REACT_APP_UNSPLASH_API_ACCESS_KEY,
-  // unsplashApiSecretKey: process.env.REACT_APP_UNSPLASH_API_SECRET_KEY,
 };
 
-// Define the fetchCityPhoto function
 const fetchCityPhoto = async (cityName, setCityPhoto) => {
   try {
     const response = await axios.get(
       `https://api.unsplash.com/search/photos?query=${encodeURIComponent(cityName)}&client_id=${config.unsplashApiKey}&count=1&order_by=relevant&per_page=1`
     );
 
-    // Extract the photo URL from the response
     const photoUrl = response.data.results[0]?.urls?.regular || '';
 
-    setCityPhoto(photoUrl); // Set the city photo URL in state
+    setCityPhoto(photoUrl);
 
     return photoUrl;
   } catch (error) {
     console.error('Error fetching city photo:', error);
-    return ''; // Return an empty string in case of an error
+    return '';
   }
 };
 
@@ -46,12 +42,13 @@ export default function CreateNewTour() {
     city: '',
     duration: 'Full-day',
     difficulty: 'Medium',
-    theme: 'Historic', // Updated: theme instead of tourType
+    theme: 'Historic',
   });
 
   const [tourContent, setTourContent] = useState('');
-  const [isLoading, setIsLoading] = useState(false); // Added isLoading state
+  const [isLoading, setIsLoading] = useState(false);
   const [cityPhoto, setCityPhoto] = useState('');
+  const [tour_id, setTour_id] = useState(null);
 
 
   const parsePointsOfInterest = (generatedTour) => {
@@ -66,28 +63,24 @@ export default function CreateNewTour() {
 
   const generateWalkingTour = async () => {
     try {
-      setIsLoading(true); // Set loading to true
+      setIsLoading(true);
 
-      // const prompt = `Walking Tour in ${tour.city}, ${tour.region}, ${tour.state}, ${tour.country}\nTour Duration: ${tour.duration}\nDifficulty Level: ${tour.difficulty}\nTour Theme: ${tour.theme},`; // Updated: theme instead of tourType
+      const sanitizedCity = sanitizeInput(tour.city);
+      const sanitizedRegion = sanitizeInput(tour.region);
+      const sanitizedState = sanitizeInput(tour.state);
+      const sanitizedCountry = sanitizeInput(tour.country);
+      const sanitizedDuration = sanitizeInput(tour.duration);
+      const sanitizedDifficulty = sanitizeInput(tour.difficulty);
+      const sanitizedTheme = sanitizeInput(tour.theme);
 
-            // Sanitize the input values
-            const sanitizedCity = sanitizeInput(tour.city);
-            const sanitizedRegion = sanitizeInput(tour.region);
-            const sanitizedState = sanitizeInput(tour.state);
-            const sanitizedCountry = sanitizeInput(tour.country);
-            const sanitizedDuration = sanitizeInput(tour.duration);
-            const sanitizedDifficulty = sanitizeInput(tour.difficulty);
-            const sanitizedTheme = sanitizeInput(tour.theme);
-      
-            const prompt = `Walking Tour in ${sanitizedCity}, ${sanitizedRegion}, ${sanitizedState}, ${sanitizedCountry}\nTour Duration: ${sanitizedDuration}\nDifficulty Level: ${sanitizedDifficulty}\nTour Theme: ${sanitizedTheme},`;
-      
+      const prompt = `Walking Tour in ${sanitizedCity}, ${sanitizedRegion}, ${sanitizedState}, ${sanitizedCountry}\nTour Duration: ${sanitizedDuration}\nDifficulty Level: ${sanitizedDifficulty}\nTour Theme: ${sanitizedTheme},`;
 
       const requestBody = {
         model: 'gpt-3.5-turbo',
         messages: [
           {
             role: 'system',
-            content: 'Create a self guided walking tour where a person can start somewhere and follow a route from start point to each point of interest and returning to the start point when the tour is over.  I only want the tour route and what points of interest are on that route. I will ask later for an in depth tour or each point of interest.',
+            content: 'Create a self-guided walking tour where a person can start somewhere and follow a route from the start point to each point of interest and returning to the start point when the tour is over.  I only want the tour route and what points of interest are on that route. I will ask later for an in-depth tour of each point of interest.',
           },
           {
             role: 'user',
@@ -97,9 +90,9 @@ export default function CreateNewTour() {
             role: 'user',
             content: `Use this as a format example for the response I want to get. I do not want any additional information other than what is in this example, also notice how the start point and end point are the same: 
           
-          Start Point: Plaça de Catalunya
+          // Start Point: Plaça de Catalunya
           
-          Route:
+          // Route:
           1. Plaça de Catalunya
           2. La Rambla
           3. Palau Güell
@@ -113,21 +106,9 @@ export default function CreateNewTour() {
           11. Casa Batlló
           12. Casa Milà (La Pedrera)
           13. Passeig de Gràcia
-          14. Plaça de Catalunya (return to start point)`
+          14. Plaça de Catalunya`
           }          
-          
         ],
-        // max_tokens: 150, // Specifies the maximum length of the response generated by the model in terms of tokens. You can use this to limit the length of the response.
-        // stop: '\n', // You can provide a list of strings in this parameter, and the model will stop generating text when it encounters any of these strings. For example, you can use it to stop the generation when you see something like "End of Tour."
-        // temperature: 0.6, // This parameter controls the randomness of the model's responses. Lower values (e.g., 0.2) make the responses more deterministic and focused, while higher values (e.g., 0.8) make them more random.
-        // top_p: 0.7, // This parameter controls the diversity of the response. Higher values (e.g., 0.8) make the model generate more diverse text.
-        // frequency_penalty: 0.3, // You can use this to adjust the penalty for frequently used words. Higher values (e.g., 0.5) make the model use less common words.
-        // presence_penalty: 0.3, // This parameter adjusts the penalty for the presence of certain words. Higher values (e.g., 0.5) make the model avoid using specific words.
-        // temperature_decay: 0.9, // This is an experimental parameter. It allows you to set a decay rate for the temperature during the conversation. For example, you can set it to 0.9 to gradually decrease the temperature as the conversation progresses.
-        // best_of: 5, // You can set this parameter to an integer value to get multiple responses and then select the best one. For example, if you set best_of to 5, you will get 5 responses, and you can choose the one that best fits your needs.
-        // timeout: 30, // Response timeout in seconds
-
-
       };
 
       const response = await axios.post('https://api.openai.com/v1/chat/completions', requestBody, {
@@ -141,21 +122,18 @@ export default function CreateNewTour() {
       setTourContent(generatedTour);
 
       const pointsOfInterest = parsePointsOfInterest(generatedTour);
-
-      // Sanitize each point of interest
       const sanitizedPointsOfInterest = pointsOfInterest.map(sanitizeInput);
-
 
       console.log('Points of Interest: ', sanitizedPointsOfInterest);
 
-      setIsLoading(false); // Set loading to false when loading is complete
+      setIsLoading(false);
 
-      return generatedTour
+      return generatedTour;
 
     } catch (error) {
       console.error('Error:', error);
       setTourContent('Error generating the walking tour. Please try again.');
-      setIsLoading(false); // Set loading to false in case of an error
+      setIsLoading(false);
     }
   };
 
@@ -176,29 +154,81 @@ export default function CreateNewTour() {
     return name;
   };
 
+  const insertPointOfInterest = async (poi, tour_id, coordinates, image_url) => {
+    const poiData = {
+      poi_name: poi,
+      tour_id: tour_id,
+      latitude: coordinates?.lat || null,
+      longitude: coordinates?.lng || null,
+      image_url: image_url || null,
+    };
+
+    console.log('Data being sent to backend for Point of Interest:', poiData);
+
+    try {
+      const response = await axios.post(`${config.apiUrl}/pointofinterest`, poiData, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      console.log(`Point of Interest "${poi}" added successfully:`, response.data);
+    } catch (error) {
+      console.error(`Error adding Point of Interest "${poi}":`, error);
+    }
+  };
+
+  const insertPointsOfInterest = async (tourId, pointsOfInterest) => {
+    try {
+      for (const poi of pointsOfInterest) {
+        const coordinatesAndImage = await getCoordinatesAndImageForPointOfInterest(poi, config.googleApiKey);
+        const { coordinates, imageUrl } = coordinatesAndImage;
+        await insertPointOfInterest(poi, tourId, coordinates, imageUrl);
+      }
+    } catch (error) {
+      console.error('Error inserting points of interest:', error);
+    }
+  };
+
+  const getCoordinatesAndImageForPointOfInterest = async (poi, apiKey) => {
+    try {
+      const coordinatesResponse = await axios.get(
+        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(poi)}&inputtype=textquery&fields=geometry&key=${apiKey}`
+      );
+  
+      const coordinatesData = coordinatesResponse.data.candidates[0]?.geometry?.location;
+  
+      // Fetch image using the Place Details request
+      const placeDetailsResponse = await axios.get(
+        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${coordinatesResponse.data.candidates[0].place_id}&fields=photos&key=${apiKey}`
+      );
+  
+      const photoReference = placeDetailsResponse.data.result?.photos?.[0]?.photo_reference;
+  
+      if (coordinatesData && photoReference) {
+        const imageUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${apiKey}`;
+        return { coordinates: coordinatesData, imageUrl };
+      }
+    } catch (error) {
+      console.error(`Error fetching data for ${poi}:`, error);
+    }
+  
+    return { coordinates: null, imageUrl: '' };
+  };
+  
+
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     let generatedWalkingTour = await generateWalkingTour();
 
-    // Parse and sanitize points of interest
-    const pointsOfInterest = parsePointsOfInterest(generatedWalkingTour); 
+    const pointsOfInterest = parsePointsOfInterest(generatedWalkingTour);
     const sanitizedPointsOfInterest = pointsOfInterest.map(sanitizeInput);
 
-    
-
-
-    // Fetch the city photo
     const cityPhoto = await fetchCityPhoto(tour.city, setCityPhoto);
 
     const newTour = {
-      // country: tour.country,
-      // region: tour.region,
-      // state: tour.state,
-      // city: tour.city,
-      // duration: tour.duration,
-      // difficulty: tour.difficulty,
-      // theme: tour.theme,
       country: sanitizeInput(tour.country),
       region: sanitizeInput(tour.region),
       state: sanitizeInput(tour.state),
@@ -206,9 +236,9 @@ export default function CreateNewTour() {
       duration: sanitizeInput(tour.duration),
       difficulty: sanitizeInput(tour.difficulty),
       theme: sanitizeInput(tour.theme),
-      tour_name: generateTourName(), // Generate the tour name
-      image_url: cityPhoto, // Include the city photo URL
-      ordered_points_of_interest: sanitizedPointsOfInterest, // Use pointsOfInterest from tourContent
+      tour_name: generateTourName(),
+      image_url: cityPhoto,
+      ordered_points_of_interest: sanitizedPointsOfInterest,
     };
 
     try {
@@ -218,13 +248,19 @@ export default function CreateNewTour() {
         },
       });
       console.log('Tour added successfully:', response.data);
+
+      setTour_id(response.data.id);
+      console.log('Tour ID:', tour_id);
+
+      insertPointsOfInterest(response.data.id, sanitizedPointsOfInterest);
+
     } catch (error) {
       console.error('Error adding tour:', error);
     }
-  };
+  }
 
 
-  
+
   return (
     <div className="container mt-5" style={{ paddingTop: '160px' }}>
       <h1 className="text-center mb-4">Walking Tour Generator</h1>
