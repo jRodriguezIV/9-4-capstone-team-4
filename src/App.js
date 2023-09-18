@@ -8,7 +8,8 @@ import NotFound from './ourComponents/Pages/NotFound';
 import CreateNewTour from './ourComponents/Pages/CreateNewTour';
 import TourIndex from './ourComponents/Pages/TourIndex';
 import TourLive from './ourComponents/Pages/TourLive';
-
+import EndTour from './ourComponents/Pages/EndTour/EndTour';
+// Input this EndTour into TourLive.js has been finalized/populated
 
 import NavBar from './ourComponents/NavBar/NavBar';
 import Footer from './ourComponents/Footer/Footer';
@@ -30,6 +31,8 @@ function App() {
               <Route path="/createnewtour" element={<CreateNewTour />} />
               <Route path="/tours" element={<TourIndex />} />
               <Route path="/tours/:id" element={<TourLive />} />
+              <Route path="/endtour" element={<EndTour />} />
+              {/* Take out or leave once tour live has populated */}
               <Route path="*" element={<NotFound />} />
             </Routes>
           </div>

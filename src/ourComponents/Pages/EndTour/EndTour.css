@@ -1,0 +1,9 @@
+.form-control {
+  font-family: 'Roboto', sans-serif;
+  font-size: 120%;
+  letter-spacing: 2px;
+}
+
+.message-container {
+  padding-top: 150px;
+}
