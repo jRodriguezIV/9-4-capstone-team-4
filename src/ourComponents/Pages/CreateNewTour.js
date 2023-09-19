@@ -34,6 +34,42 @@ const fetchCityPhoto = async (cityName, setCityPhoto) => {
   }
 };
 
+  // Add a function to fetch coordinates from OpenAI
+const getCoordinatesFromOpenAI = async (poi) => {
+  try {
+    // Make a request to OpenAI to get coordinates based on the point of interest
+    const response = await axios.get(
+      `https://your-openai-api-url.com/get-coordinates?poi=${encodeURIComponent(poi)}`
+    );
+
+    const coordinatesData = response.data.coordinates;
+
+    return coordinatesData;
+  } catch (error) {
+    console.error(`Error fetching coordinates for ${poi} from OpenAI:`, error);
+  }
+
+  return null;
+};
+
+// Add a function to fetch images from Unsplash
+const getImageFromUnsplash = async (poi) => {
+  try {
+    const response = await axios.get(
+      `https://api.unsplash.com/search/photos?query=${encodeURIComponent(poi)}&client_id=${config.unsplashApiKey}&count=1&order_by=relevant&per_page=1`
+    );
+
+    const photoUrl = response.data.results[0]?.urls?.regular || '';
+
+    return photoUrl;
+  } catch (error) {
+    console.error('Error fetching city photo:', error);
+  }
+
+  return '';
+};
+
+
 export default function CreateNewTour() {
   const [tour, setTour] = useState({
     country: '',
@@ -180,43 +216,15 @@ export default function CreateNewTour() {
   const insertPointsOfInterest = async (tourId, pointsOfInterest) => {
     try {
       for (const poi of pointsOfInterest) {
-        const coordinatesAndImage = await getCoordinatesAndImageForPointOfInterest(poi, config.googleApiKey);
-        const { coordinates, imageUrl } = coordinatesAndImage;
+        const coordinates = await getCoordinatesFromOpenAI(poi);
+        const imageUrl = await getImageFromUnsplash(poi);
         await insertPointOfInterest(poi, tourId, coordinates, imageUrl);
       }
     } catch (error) {
       console.error('Error inserting points of interest:', error);
     }
   };
-
-  const getCoordinatesAndImageForPointOfInterest = async (poi, apiKey) => {
-    try {
-      const coordinatesResponse = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=${encodeURIComponent(poi)}&inputtype=textquery&fields=geometry&key=${apiKey}`
-      );
   
-      const coordinatesData = coordinatesResponse.data.candidates[0]?.geometry?.location;
-  
-      // Fetch image using the Place Details request
-      const placeDetailsResponse = await axios.get(
-        `https://maps.googleapis.com/maps/api/place/details/json?place_id=${coordinatesResponse.data.candidates[0].place_id}&fields=photos&key=${apiKey}`
-      );
-  
-      const photoReference = placeDetailsResponse.data.result?.photos?.[0]?.photo_reference;
-  
-      if (coordinatesData && photoReference) {
-        const imageUrl = `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=${photoReference}&key=${apiKey}`;
-        return { coordinates: coordinatesData, imageUrl };
-      }
-    } catch (error) {
-      console.error(`Error fetching data for ${poi}:`, error);
-    }
-  
-    return { coordinates: null, imageUrl: '' };
-  };
-  
-
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
