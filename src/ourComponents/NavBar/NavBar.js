@@ -78,8 +78,8 @@ function NavBar() {
               aria-controls="navbar-sticky"
               aria-expanded={menuOpen}
             >
-              <span className="sr-only">Open main menu</span>
-              <div className="bg-red-500 rounded-lg p-0 items-center">
+              <span className="sr-only ">Open main menu</span>
+              <div className="bg-red-500  rounded-lg p-0 items-center">
                 <Hamburger
                   className="spiral"
                   toggled={menuOpen} //automatic open and close once clicked to another page
