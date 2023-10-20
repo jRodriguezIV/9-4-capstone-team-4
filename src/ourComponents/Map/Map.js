@@ -47,7 +47,7 @@ export default function Map({ pointsOfInterest, allPointsOfInterest, activeMarke
   }
 
   return (
-    <div position='center' className='h-[300px] w-[600px]'>
+    <div position='center' className='lg:h-[300px] lg:w-[600px] max-[760px]:h-24'>
       <GoogleMap
         center={{ lat: Number(firstPoi.latitude), lng: Number(firstPoi.longitude) }}
         zoom={15}
