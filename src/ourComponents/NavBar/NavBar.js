@@ -22,7 +22,7 @@ function NavBar() {
             <a href="/" className="w-[172px] h-auto flex flex-col items-center"> {/* Use flex-col to stack items vertically */}
               <img
                 src={logo}
-                className="mt-1.5 mr-3 w-[120%] h-[120%]  max-[760px]:w-[35%] left-[0px] drop-shadow-[2px_0px_5px_rgba(255,255,255,0.5)]"
+                className="mt-1.5 mr-3 w-[120%] h-[120%]  max-[760px]:w-[35%] max-[760px]:ml-[-50px] drop-shadow-[2px_0px_5px_rgba(255,255,255,0.5)]"
                 alt="CityWhisperer Logo"
               />
               {/* <span className="text-center text-xs">Powered by chatGPT</span> */}
