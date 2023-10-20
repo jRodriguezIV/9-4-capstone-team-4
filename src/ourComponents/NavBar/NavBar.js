@@ -16,7 +16,7 @@ function NavBar() {
   return (
     <div className='mb-[-65px] navBar'>
       <nav
-        className={loc.pathname !== '/' ? 'bg-[#fffffff6] fixed w-full z-20 top-0  left-0 border-b-0 border-gray-200 custom-border pb-0 pt-0 px-3 h-[12%] shadow-2xl' : 'bg-white bg-opacity-0 fixed w-full z-20 top-0 left-0 border-b-0 border-gray-200 custom-border pb-0 pt-0'}>
+        className={loc.pathname !== '/' ? 'bg-[#fffffff6] fixed w-full z-20 top-0 left-0 border-b-0 border-gray-200 custom-border pb-0 pt-0 px-3 h-[12%] max-[760px]:h-[7%] shadow-2xl' : 'bg-white bg-opacity-0 fixed w-full z-20 top-0 left-0 border-b-0 border-gray-200 custom-border pb-0 pt-0'}>
         <div className="flex flex-wrap items-center justify-between  pt-2 text-sky-950 ml-16 mr-16 max-[760px]:mx-0 ">
           <span className="logo">
             <a href="/" className="w-[172px] h-auto flex flex-col items-center"> {/* Use flex-col to stack items vertically */}
@@ -74,17 +74,17 @@ function NavBar() {
               onClick={toggleMenu}
               data-collapse-toggle="navbar-sticky"
               type="button"
-              className="inline-flex items-center p-2 w-10 h-10  justify-center text-sm text-white rounded-lg md:hidden hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-gray-200"
+              className={loc.pathname !== "/" ? "inline-flex items-center p-2 w-10 h-10  justify-center text-sm text-black rounded-lg md:hidden hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-gray-200" : "inline-flex items-center p-2 w-10 h-10  justify-center text-sm text-white rounded-lg md:hidden hover:bg-transparent focus:outline-none focus:ring-2 focus:ring-gray-200"}
               aria-controls="navbar-sticky"
               aria-expanded={menuOpen}
             >
               <span className="sr-only ">Open main menu</span>
-              <div className="bg-transparent  rounded-lg p-0 items-center h-12 w-12 mr-10">
+              <div className="bg-transparent rounded-lg p-0 items-center h-12 w-12 mr-10">
                 <Hamburger
                   className="spiral"
                   toggled={menuOpen} //automatic open and close once clicked to another page
                   size={10}
-                  hideOutline={true}
+                  hideOutline={false}
                 />
               </div>
             </button>
