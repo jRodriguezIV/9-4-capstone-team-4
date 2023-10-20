@@ -682,11 +682,11 @@ const generateWalkingTour = async () => {
                 </div>
               </div>
             </div>
-            {isLoading && (
-          <div className=' max-w-xl '>
+            {isLoading && cityPhoto && (
+          <div className=' max-w-xl flex items-center'>
             {cityPhoto && (
 
-               <img src={cityPhoto ? cityPhoto : ""} alt={`${tour.city}`}  />
+               <img src={cityPhoto} alt={`${tour.city}`} className='max-w-xlmax-h-[550px]' />
             )}
                 </div>
 
@@ -700,7 +700,7 @@ const generateWalkingTour = async () => {
 
             <div style={{ margin: '16px 0' }}>
               <div className="flex justify-center items-center h-screen">
-                <img src={loadingAnimation} alt="Loading..." className="w-1/4 mr-28" />
+                <img src={loadingAnimation} alt="Loading..." className={cityPhoto ? "w-1/4 mr-28":"w-1/4"} />
               </div>
             </div>
           </div>
