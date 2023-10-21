@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
 import video1 from "../../assets/LandingPageVideo.mp4";
 import video2 from "../../assets/Page2_WebPage_Landscape.mp4";
 import image1 from "../../assets/travelPhotos/cristina-gottardi--YzMZYqwoH4-unsplash (1).jpg";
@@ -149,6 +150,7 @@ export default function Home() {
               You can use our Web App with the help of ChatGpt and Google Maps
               to create your own personal tour anywhere you want!
             </div>
+            <Link to='/createnewtour'>
             <button
               type="button"
               data-te-ripple-init
@@ -157,6 +159,7 @@ export default function Home() {
             >
               Create New Tour
             </button>
+            </Link>
           </div>
           <div className="md:inline-block md:w-11/12 shadow-lg">
             <img
