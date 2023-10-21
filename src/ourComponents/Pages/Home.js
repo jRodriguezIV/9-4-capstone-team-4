@@ -203,9 +203,9 @@ export default function Home() {
 
       {/* partition 4 */}
       <div className="h-screen pt-20">
-        <div className="bg-blackbg h-5/6 max-[760px]:h-5/6 max-[760px]:w-screen mt-[15%] max-[760px]: mx-40 max-[760px]:mx-0 max-[760px]:r-0 rounded-3xl shadow-2xl">
+        <div className="bg-blackbg h-6/6  max-[760px]:w-screen max-[760px]:mt-[15%] max-[760px]: mx-40 max-[760px]:mx-0 max-[760px]:r-0 rounded-3xl shadow-2xl">
           <img src={image4} alt="FindYourWay" className="w-1/4 max-[760px]:w-2/4 object-center inline-block rounded-lg mt-[3%] max-[760px]:mt-20" />
-          <div className="mx-[12%] my-[3%] 
+          <div className="mx-[10%] my-[3%] pb-10 
           max-[760px]:mt-14 text-[#ffffff] font-serif text-3xl font-medium max-[760px]:text-2xl max-[760px]:mx-10">
             Embark on endless journeys with <span className="text-[#295583] font-semibold">CityWhisperer</span> and let your curiosity guide you. Join us in discovering the world, one step at a time.
           </div>
