@@ -56,6 +56,7 @@
   margin: 0px 45px 10px 80px;
 }
 
+
 .about {
   /* margin: 100px; */
   text-align: left;
@@ -81,6 +82,7 @@
   width: 100%;
   max-width: 750px; /* Adjust the maximum width for desktop */
   margin: 0 20px 45px; /* Add marg50in for both sides to increase spacing */
+justify-items: center;
   background-color: rgba(255, 255, 255, 0.9)
 }
 
@@ -94,22 +96,6 @@
   text-decoration: none;
 }
 
-@media (max-width: 1024px) {
-  .app-summary-container {
-    margin: 50px 50px 15px 50px;
-  }
-}
-
-@media (max-width: 640px) {
-  .app-summary-container {
-    margin: 20px 20px 10px 20px;
-  }
-
-  .team {
-    margin: 0;
-  }
-}
-
 .team-container {
   display: flex;
   flex-direction: column;
@@ -120,3 +106,43 @@
   background-color: rgba(255, 255, 255, 0.9);
   /* height: 100vh; */
 }
+
+@media (max-width: 1024px) {
+  .app-summary-container {
+    margin: 50px 50px 15px 50px;
+  }
+}
+
+@media (max-width: 640px) {
+  .app-summary-container {
+    margin: -10px;
+
+  }
+
+  .team {
+    margin: 0;
+  }
+
+  
+  .team-member-card{
+    margin: 0px 0px 45px;
+  }
+
+  .bio-paragraph {
+    margin: 0px 0px 10px 0px;
+    text-align: center;
+  }
+
+  .team-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: 40px 50px 25px 50px;
+    background-color: rgba(255, 255, 255, 0.9);
+    /* height: 100vh; */
+  }
+}
+
+
+

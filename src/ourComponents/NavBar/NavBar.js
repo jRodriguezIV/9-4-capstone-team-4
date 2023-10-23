@@ -9,6 +9,7 @@ function NavBar() {
 
   const loc = useLocation()
 
+
   const toggleMenu = () => {
     setMenuOpen(menuOpen => !menuOpen);
   };

@@ -110,7 +110,7 @@ function About() {
               className="markerPin"
               style={{ width: '24px', height: '24px' }}
             />&nbsp;
-            <h1 className="font-bold text-xl text-center my-0 dancing-script text-sky-950 drop-shadow-lg p-2">
+            <h1 className="font-bold text-lg max-[760px]:text-6xl text-center my-0 dancing-script text-sky-950 drop-shadow-lg p-2">
               Meet the Team</h1>
           </div>
           <div className="team-members mt-4">
